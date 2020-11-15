@@ -84,4 +84,60 @@ public class Cryptosystem {
 		}
 		return block;
 	}
+
+	private static byte[] pad(byte[] text, int blockSize) {
+		int paddedLength = blockSize - (text.length % blockSize);
+		byte padded[] = new byte[text.length + paddedLength];
+		
+		for(int i = 0; i < text.length; ++i) { padded[i] = text[i]; }
+		for(int i = 0; i < paddedLength - 1; ++i) { padded[text.length + i] = 0; }
+
+		if(paddedLength <= 127) { padded[padded.length - 1] = (byte) paddedLength; }
+		else {
+			byte result[] = intToByte(paddedLength);
+			padded[padded.length - 2] = result[0];
+			padded[padded.length - 1] = result[1];
+		}
+
+		return padded;
+	}
+
+	private static byte[] unpad(byte[] text, int blockSize) {
+		int paddedLength;
+		if((int)text[text.length - 1] >= 0) { paddedLength = text[text.length] - 1; }
+		else {
+			byte array[] = new byte[2];
+			array[0] = text[text.length - 2];
+			array[1] = text[text.length - 1];
+			paddedLength = byteToInt(array);
+		}
+
+		byte unpadded[] = new byte[text.length - paddedLength];
+		for(int i =0; i < unpadded.length; ++i) { unpadded[i] = text[i]; }
+
+		return unpadded;
+	}
+
+	private static int getPlainTextBlockSize(int bitLength) {
+		return Math.max((bitLength - 1) / 8, 1);
+	}
+
+	private static int getCipherTextBlockSize(int bitLength) {
+		return (bitLength / 8) + 1;
+	}
+
+	private static byte[] intToByte(int num) {
+		byte result[] = new byte[2];
+		result[0] = (byte)((num>>8)&0xFF);
+		result[1] = (byte)(num &0xFF);
+		return result;
+	}
+
+	private static int byteToInt(byte[] array) {
+		return (int)(((array[0] & 0xff) << 8) | ((array[1] & 0xff) << 0));
+	}
+
+	private static void initStartTime() { startTime = System.currentTimeMillis(); }
+	private static void calculateExecutionTime() { executionTime = System.currentTimeMillis() - startTime; }
+	public static long getExecutionTime() { return executionTime; }
 }
