@@ -8,7 +8,7 @@ import java.util.Random;
 import java.nio.file.NoSuchFileException;
 import java.io.IOException;
 
-public class Main {
+public class Cryptosystem {
 	private static long executionTime = -1;
 	private static long startTime;
 
