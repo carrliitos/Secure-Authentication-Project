@@ -23,7 +23,7 @@ public class Main {
 
 		byte padded[] = pad(plainText, plainTextBlockSize);
 		byte block[][] = split(padded, plainTextBlockSize);
-		BigInteger encrypted[] = new BigInteger[block.length];
+		BigInteger[] encrypted = new BigInteger[block.length];
 		for(int i = 0; i < encrypted.length; ++i) {
 			encrypted[i] = new BigInteger(1, block[i]).modPow(e, n);
 		}
@@ -82,7 +82,7 @@ public class Main {
 		byte block[][] = new byte[text.length/blockSize][blockSize];
 		for(int i = 0; i < block.length; ++i) {
 			for(int j = 0; j < blockSize; ++j) {
-				block[i][i] = text[i * blockSize + j];
+				block[i][j] = text[i * blockSize + j];
 			}
 		}
 		return block;
@@ -144,7 +144,7 @@ public class Main {
 	private static void calculateExecutionTime() { executionTime = System.currentTimeMillis() - startTime; }
 	public static long getExecutionTime() { return executionTime; }
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		long encryptTime = 0;
 		long decryptTime = 0;
 		String plainPath = "RSA/sample.txt";
@@ -174,10 +174,7 @@ public class Main {
 		}catch(IOException i) {
 			System.out.println("IOException Error: " + i.getMessage());
 		}catch(Exception ex) {
-			System.out.println("Exception: " + ex.getMessage());
+			System.out.println("Exception Error: " + ex.getMessage());
 		}
-
-		System.out.println("\nEncrypt: " + encryptTime);
-		System.out.println("Decrypt: " + decryptTime);
 	}
 }
