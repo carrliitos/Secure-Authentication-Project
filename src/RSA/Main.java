@@ -5,8 +5,10 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
+import java.nio.file.NoSuchFileException;
+import java.io.IOException;
 
-public class Cryptosystem {
+public class Main {
 	private static long executionTime = -1;
 	private static long startTime;
 
@@ -49,10 +51,11 @@ public class Cryptosystem {
 		int cipherBlockSize = getCipherTextBlockSize(bitLength);
 
 		if(cipherText.length % cipherBlockSize != 0) {
-			throw new Exception("密文的长度非法");
+			throw new Exception("Illegal ciphertext length");
 		}
-		byte[][] block = split(cipherText, cipherBlockSize);
-		BigInteger[] decrypted = new BigInteger[block.length];
+
+		byte block[][] = split(cipherText, cipherBlockSize);
+		BigInteger decrypted[] = new BigInteger[block.length];
 		for(int i = 0; i < decrypted.length; ++i) {
 			decrypted[i] = new BigInteger(block[i]).modPow(d, n);
 		}
@@ -140,4 +143,41 @@ public class Cryptosystem {
 	private static void initStartTime() { startTime = System.currentTimeMillis(); }
 	private static void calculateExecutionTime() { executionTime = System.currentTimeMillis() - startTime; }
 	public static long getExecutionTime() { return executionTime; }
+
+	public static void main(String[] args) {
+		long encryptTime = 0;
+		long decryptTime = 0;
+		String plainPath = "RSA/sample.txt";
+		String encryptPath = "RSA/encryptedRSA.txt";
+		String decryptPath = "RSA/decryptedRSA.txt";
+
+		KeyPair keys = generateKeyPair(2048);
+
+		try {
+			// encryption
+			byte plainText[] = Files.readAllBytes(Paths.get(plainPath));
+			byte byteFile[] = encrypt(plainText, keys.getPublicKey());
+			encryptTime = getExecutionTime();
+			FileOutputStream fout = new FileOutputStream(encryptPath);
+			fout.write(byteFile);
+			fout.close();
+
+			// decryption
+			byte cipherText[] = Files.readAllBytes(Paths.get(encryptPath));
+			byteFile = decrypt(cipherText, keys.getPrivateKey());
+			decryptTime = getExecutionTime();
+			fout = new FileOutputStream(decryptPath);
+			fout.write(byteFile);
+			fout.close();
+		}catch(NoSuchFileException f) {
+			System.out.println("NoSuchFileException Error: " + f.getMessage());
+		}catch(IOException i) {
+			System.out.println("IOException Error: " + i.getMessage());
+		}catch(Exception ex) {
+			System.out.println("Exception: " + ex.getMessage());
+		}
+
+		System.out.println("\nEncrypt: " + encryptTime);
+		System.out.println("Decrypt: " + decryptTime);
+	}
 }
