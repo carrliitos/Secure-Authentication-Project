@@ -144,7 +144,7 @@ public class Cryptosystem {
 		// PrivateKey priKey = keys.getPrivateKey();
 		// priKey.saveToFile(privateKey);
 
-		// byte plainText[] = Files.readAllBytes(Paths.get("logins.txt"));
+		// byte plainText[] = Files.readAllBytes(Paths.get("logins.csv"));
 		// PublicKey pubKey = new PublicKey("publicKey.txt");
 		// byte encryptedFile[] = encrypt(plainText, pubKey);
 		// File encryptedPath = new File("encryptedFile.enc");
@@ -157,7 +157,7 @@ public class Cryptosystem {
 		byte cipherText[] = Files.readAllBytes(Paths.get("encryptedFile.enc"));
 		PrivateKey priKey = new PrivateKey("privateKey.txt");
 		byte decryptedFile[] = decrypt(cipherText, priKey);
-		File decryptedPath = new File("decryptedFile.dec");
+		File decryptedPath = new File("decryptedFile.dec.csv");
 		decryptedPath.createNewFile();
 		FileOutputStream fout = new FileOutputStream(decryptedPath);
 		fout.write(decryptedFile);
