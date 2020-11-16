@@ -13,8 +13,6 @@ public class Cryptosystem {
 	private static long startTime;
 
 	public static byte[] encrypt(byte[] plainText, PublicKey Key) {
-		initStartTime();
-
 		BigInteger e = Key.getE();
 		BigInteger n = Key.getN();
 		int bitLength = Key.getN().bitLength();
@@ -36,14 +34,10 @@ public class Cryptosystem {
 				cipherText[j + offset] = cipher[j];
 			}
 		}
-
-		calculateExecutionTime();
 		return cipherText;
 	}
 
 	public static byte[] decrypt(byte[] cipherText, PrivateKey Key) throws Exception {
-		initStartTime();
-
 		BigInteger d = Key.getD();
 		BigInteger n = Key.getN();
 		int bitLength = Key.getN().bitLength();
@@ -69,7 +63,6 @@ public class Cryptosystem {
 		}
 
 		plainText = unpad(plainText, plainBlockSize);
-		calculateExecutionTime();
 		return plainText;
 	}
 
@@ -140,15 +133,11 @@ public class Cryptosystem {
 		return (int)(((array[0] & 0xff) << 8) | ((array[1] & 0xff) << 0));
 	}
 
-	private static void initStartTime() { startTime = System.currentTimeMillis(); }
-	private static void calculateExecutionTime() { executionTime = System.currentTimeMillis() - startTime; }
-	public static long getExecutionTime() { return executionTime; }
-
 	public static void main(String[] args) throws Exception {
 		long encryptTime = 0;
 		long decryptTime = 0;
-		String plainPath = "RSA/sample.txt";
-		String encryptPath = "RSA/encryptedRSA.txt";
+		String plainPath = "accounts.txt";
+		String encryptPath = "RSA/accounts.txt";
 		String decryptPath = "RSA/decryptedRSA.txt";
 
 		KeyPair keys = generateKeyPair(2048);
@@ -157,7 +146,7 @@ public class Cryptosystem {
 			// encryption
 			byte plainText[] = Files.readAllBytes(Paths.get(plainPath));
 			byte byteFile[] = encrypt(plainText, keys.getPublicKey());
-			encryptTime = getExecutionTime();
+
 			FileOutputStream fout = new FileOutputStream(encryptPath);
 			fout.write(byteFile);
 			fout.close();
@@ -165,7 +154,7 @@ public class Cryptosystem {
 			// decryption
 			byte cipherText[] = Files.readAllBytes(Paths.get(encryptPath));
 			byteFile = decrypt(cipherText, keys.getPrivateKey());
-			decryptTime = getExecutionTime();
+
 			fout = new FileOutputStream(decryptPath);
 			fout.write(byteFile);
 			fout.close();
