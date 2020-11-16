@@ -7,11 +7,9 @@ import java.nio.file.Paths;
 import java.util.Random;
 import java.nio.file.NoSuchFileException;
 import java.io.IOException;
+import java.io.File;
 
 public class Cryptosystem {
-	private static long executionTime = -1;
-	private static long startTime;
-
 	public static byte[] encrypt(byte[] plainText, PublicKey Key) {
 		BigInteger e = Key.getE();
 		BigInteger n = Key.getN();
@@ -133,12 +131,19 @@ public class Cryptosystem {
 		return (int)(((array[0] & 0xff) << 8) | ((array[1] & 0xff) << 0));
 	}
 
-	public static void main(String[] args) throws Exception {
-		String plainPath = "RSA/accounts.txt";
-		String encryptPath = "RSA/accounts.txt";
-		String decryptPath = "RSA/decryptedRSA.txt";
+	// public void writeToFile(String username, String password) throws IOException {
+	// 	BufferedWriter out = new BufferedWriter(new FileWriter("file.txt"));
+	// 	out.write(username + "#" + password);
+	// 	out.newLine();
+	// 	out.close();
+	// }
 
+	public static void main(String[] args) throws Exception {
 		KeyPair keys = generateKeyPair(2048);
+
+		// String plainPath = "logins.txt";
+		String encryptPath = "logins.enc";
+		// String decryptPath = "decryptedRSA.txt";
 
 		try {
 			// encryption
@@ -149,13 +154,16 @@ public class Cryptosystem {
 			fout.write(byteFile);
 			fout.close();
 
-			// decryption
-			byte cipherText[] = Files.readAllBytes(Paths.get(encryptPath));
-			byteFile = decrypt(cipherText, keys.getPrivateKey());
+			File decryptedFile = new File(encryptPath + ".dec");
+			if(!decryptedFile.exists()) { 
+				decryptedFile.createNewFile(); 
+				byte cipherText[] = Files.readAllBytes(Paths.get(encryptPath));
+				byteFile = decrypt(cipherText, keys.getPrivateKey());
 
-			fout = new FileOutputStream(decryptPath);
-			fout.write(byteFile);
-			fout.close();
+				fout = new FileOutputStream(decryptedFile);
+				fout.write(byteFile);
+				fout.close();
+			}
 		}catch(NoSuchFileException f) {
 			System.out.println("NoSuchFileException Error: " + f.getMessage());
 		}catch(IOException i) {
