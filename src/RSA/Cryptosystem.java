@@ -136,7 +136,7 @@ public class Cryptosystem {
 	public static void main(String[] args) throws Exception {
 		long encryptTime = 0;
 		long decryptTime = 0;
-		String plainPath = "accounts.txt";
+		String plainPath = "RSA/accounts.txt";
 		String encryptPath = "RSA/accounts.txt";
 		String decryptPath = "RSA/decryptedRSA.txt";
 
