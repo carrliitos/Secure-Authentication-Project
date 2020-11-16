@@ -8,6 +8,8 @@ import java.util.Random;
 import java.nio.file.NoSuchFileException;
 import java.io.IOException;
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Cryptosystem {
 	public static byte[] encrypt(byte[] plainText, PublicKey Key) {
@@ -131,45 +133,34 @@ public class Cryptosystem {
 		return (int)(((array[0] & 0xff) << 8) | ((array[1] & 0xff) << 0));
 	}
 
-	// public void writeToFile(String username, String password) throws IOException {
-	// 	BufferedWriter out = new BufferedWriter(new FileWriter("file.txt"));
-	// 	out.write(username + "#" + password);
-	// 	out.newLine();
-	// 	out.close();
-	// }
-
 	public static void main(String[] args) throws Exception {
-		KeyPair keys = generateKeyPair(2048);
+		// KeyPair keys = generateKeyPair(2048);
 
-		// String plainPath = "logins.txt";
-		String encryptPath = "logins.enc";
-		// String decryptPath = "decryptedRSA.txt";
+		// String publicKey = "publicKey.txt";
+		// PublicKey pubKey = keys.getPublicKey();
+		// pubKey.saveToFile(publicKey);
 
-		try {
-			// encryption
-			byte plainText[] = Files.readAllBytes(Paths.get(plainPath));
-			byte byteFile[] = encrypt(plainText, keys.getPublicKey());
+		// String privateKey = "privateKey.txt";
+		// PrivateKey priKey = keys.getPrivateKey();
+		// priKey.saveToFile(privateKey);
 
-			FileOutputStream fout = new FileOutputStream(encryptPath);
-			fout.write(byteFile);
-			fout.close();
+		// byte plainText[] = Files.readAllBytes(Paths.get("logins.txt"));
+		// PublicKey pubKey = new PublicKey("publicKey.txt");
+		// byte encryptedFile[] = encrypt(plainText, pubKey);
+		// File encryptedPath = new File("encryptedFile.enc");
+		// encryptedPath.createNewFile();
+		// FileOutputStream fout = new FileOutputStream(encryptedPath);
+		// fout.write(encryptedFile);
+		// fout.close();
 
-			File decryptedFile = new File(encryptPath + ".dec");
-			if(!decryptedFile.exists()) { 
-				decryptedFile.createNewFile(); 
-				byte cipherText[] = Files.readAllBytes(Paths.get(encryptPath));
-				byteFile = decrypt(cipherText, keys.getPrivateKey());
-
-				fout = new FileOutputStream(decryptedFile);
-				fout.write(byteFile);
-				fout.close();
-			}
-		}catch(NoSuchFileException f) {
-			System.out.println("NoSuchFileException Error: " + f.getMessage());
-		}catch(IOException i) {
-			System.out.println("IOException Error: " + i.getMessage());
-		}catch(Exception ex) {
-			System.out.println("Exception Error: " + ex.getMessage());
-		}
+		// Encrypted File = "encryptedFile.enc";
+		byte cipherText[] = Files.readAllBytes(Paths.get("encryptedFile.enc"));
+		PrivateKey priKey = new PrivateKey("privateKey.txt");
+		byte decryptedFile[] = decrypt(cipherText, priKey);
+		File decryptedPath = new File("decryptedFile.dec");
+		decryptedPath.createNewFile();
+		FileOutputStream fout = new FileOutputStream(decryptedPath);
+		fout.write(decryptedFile);
+		fout.close();
 	}
 }
