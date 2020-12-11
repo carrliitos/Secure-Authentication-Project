@@ -16,3 +16,14 @@ Since security is critical for this application, classical ciphers will not suff
 ## My implementation
 Two Cryptosystems are individually implemented to practice my ciphers -- 
 ***AES*** and ***RSA***.
+
+## To run
+* For RSA - locate RSA [folder](src/RSA) and compile all java files and run:
+```
+$ java Cryptosystem
+```
+* For AES - locate AES [folder](src/AES) and compile all java files and run:
+```
+$ java AES <mode> <keyFile> <inputFile>
+    - mode: 'e' for encryption, 'd' for decryption
+```

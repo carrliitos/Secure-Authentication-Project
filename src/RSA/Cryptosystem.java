@@ -134,26 +134,26 @@ public class Cryptosystem {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// KeyPair keys = generateKeyPair(2048);
+		KeyPair keys = generateKeyPair(2048);
 
-		// String publicKey = "publicKey.txt";
-		// PublicKey pubKey = keys.getPublicKey();
-		// pubKey.saveToFile(publicKey);
+		String publicKey = "publicKey.txt";
+		PublicKey pubKey = keys.getPublicKey();
+		pubKey.saveToFile(publicKey);
 
-		// String privateKey = "privateKey.txt";
-		// PrivateKey priKey = keys.getPrivateKey();
-		// priKey.saveToFile(privateKey);
+		String privateKey = "privateKey.txt";
+		PrivateKey priKey = keys.getPrivateKey();
+		priKey.saveToFile(privateKey);
 
-		// byte plainText[] = Files.readAllBytes(Paths.get("logins.csv"));
-		// PublicKey pubKey = new PublicKey("publicKey.txt");
-		// byte encryptedFile[] = encrypt(plainText, pubKey);
-		// File encryptedPath = new File("encryptedFile.enc");
-		// encryptedPath.createNewFile();
-		// FileOutputStream fout = new FileOutputStream(encryptedPath);
-		// fout.write(encryptedFile);
-		// fout.close();
+		byte plainText[] = Files.readAllBytes(Paths.get("logins.csv"));
+		PublicKey pubKey = new PublicKey("publicKey.txt");
+		byte encryptedFile[] = encrypt(plainText, pubKey);
+		File encryptedPath = new File("encryptedFile.enc");
+		encryptedPath.createNewFile();
+		FileOutputStream fout = new FileOutputStream(encryptedPath);
+		fout.write(encryptedFile);
+		fout.close();
 
-		// Encrypted File = "encryptedFile.enc";
+		Encrypted File = "encryptedFile.enc";
 		byte cipherText[] = Files.readAllBytes(Paths.get("encryptedFile.enc"));
 		PrivateKey priKey = new PrivateKey("privateKey.txt");
 		byte decryptedFile[] = decrypt(cipherText, priKey);
